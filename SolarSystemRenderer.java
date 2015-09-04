@@ -100,7 +100,7 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
     private  void initLightings2(GL10 gl)
     {
         float [] diffuse = {1.0f,1.0f,1.0f,1.0f};
-        float [] pos = { 10.0f,0.0f,3.0f,1.0f };
+        float [] pos = { 50.0f,0.0f,3.0f,1.0f };
         float [] white = { 1.0f,1.0f,1.0f,1.0f };
         float [] red = { 1.0f,0.0f,0.0f,1.0f };
         float [] green = { 0.0f,1.0f,0.0f,1.0f };
@@ -111,9 +111,10 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         float [] halfcyan = { 0.0f,0.5f,0.5f,1.0f };
 
         gl.glLightfv(SS_SUNLIGHT,GL10.GL_POSITION,makeFloaBuffer(pos));
-       gl.glLightfv(SS_SUNLIGHT,GL10.GL_DIFFUSE,makeFloaBuffer(diffuse));
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_DIFFUSE,makeFloaBuffer(diffuse));
         gl.glLightfv(SS_SUNLIGHT,GL10.GL_SPECULAR,makeFloaBuffer(red));
         gl.glLightfv(SS_SUNLIGHT,GL10.GL_AMBIENT,makeFloaBuffer(blue));
+        gl.glLightf(SS_SUNLIGHT,GL10.GL_LINEAR_ATTENUATION,0.025f);
 
 
 
@@ -122,7 +123,7 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, makeFloaBuffer(red));
         //gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_AMBIENT,makeFloaBuffer(blue));
 
-        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_EMISSION,makeFloaBuffer(yellow));
+     //   gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_EMISSION,makeFloaBuffer(yellow));
 
         gl.glShadeModel(GL10.GL_SMOOTH);
         gl.glEnable(GL10.GL_LIGHTING);
