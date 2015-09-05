@@ -94,9 +94,75 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         gl.glDepthMask(false);
       //  initGeometry(gl);
         //initLightings(gl);
-        initLightings2(gl);
+        //initLightings2(gl);
+        initLightings3(gl);
+
+
     }
 
+    private void initLightings3(GL10 gl)
+    {
+        float [] posMain = {5.0f,4.0f,6.0f,1.0f};
+        float [] posFill1 = {-15.0f,15.0f,0.0f,1.0f};
+        float [] posFill2 = {-10.0f,-4.0f,1.0f,1.0f};
+
+        float [] white = {1.0f,1.0f,1.0f,1.0f};
+        float [] red = {1.0f,0.0f,0.0f,1.0f};
+        float [] dimred = {0.5f,0.0f,0.0f,1.0f};
+
+        float [] green = {0.0f,1.0f,0.0f,0.0f};
+        float [] dimgreen = {0.0f,0.5f,0.0f,0.0f};
+
+        float [] blue = {0.0f,0.0f,1.0f,1.0f};
+        float [] dimblue = {0.0f,0.0f,0.2f,1.0f};
+
+        float [] cyan = {0.0f,1.0f,1.0f,1.0f};
+        float [] yellow = {1.0f,1.0f,0.0f,1.0f};
+        float [] magenta = {1.0f,0.0f,1.0f,1.0f};
+        float [] dimmagenta = {0.75f,0.0f,0.25f,1.0f};
+
+        float [] dimcyan = {0.0f,0.5f,0.5f,1.0f};
+
+        // loght go here.
+
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_POSITION,makeFloaBuffer(posMain));
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_DIFFUSE,makeFloaBuffer(white));
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_SPECULAR,makeFloaBuffer(yellow));
+
+
+
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_POSITION,makeFloaBuffer(posFill1));
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_DIFFUSE,makeFloaBuffer(dimblue));
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_SPECULAR,makeFloaBuffer(dimcyan));
+
+
+
+
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_POSITION,makeFloaBuffer(posFill2));
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_DIFFUSE,makeFloaBuffer(dimmagenta));
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_SPECULAR,makeFloaBuffer(dimblue));
+
+        gl.glLightf(SS_SUNLIGHT,GL10.GL_QUADRATIC_ATTENUATION,0.005f);
+
+        //materials go here
+
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_DIFFUSE,makeFloaBuffer(cyan));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_SPECULAR,makeFloaBuffer(white));
+        gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 25);
+
+        gl.glShadeModel(GL10.GL_SMOOTH);
+        gl.glLightModelf(GL10.GL_LIGHT_MODEL_TWO_SIDE, 1.0f);
+
+        gl.glEnable(GL10.GL_LIGHTING);
+        gl.glEnable(SS_SUNLIGHT);
+        gl.glEnable(SS_FILLLIGHT1);
+        gl.glEnable(SS_FILLLIGHT2);
+
+        gl.glLoadIdentity();
+
+
+
+    }
     private  void initLightings2(GL10 gl)
     {
         float [] diffuse = {1.0f,1.0f,1.0f,1.0f};
@@ -152,6 +218,9 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         return fb;
     }
     public final static int SS_SUNLIGHT =  GL10.GL_LIGHT0;
+    // 5-September-2015
+    public final static int SS_FILLLIGHT1 =  GL10.GL_LIGHT1;
+    public final static int SS_FILLLIGHT2 =  GL10.GL_LIGHT2;
     private boolean mTranslucentBackgroung;
     private Planet mPlanet;
     private float mTransY;
