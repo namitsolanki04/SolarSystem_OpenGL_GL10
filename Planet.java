@@ -19,6 +19,8 @@ public class Planet {
     float m_Radius;
     int m_Stacks,m_Slices;
 
+    public float [] m_Pos = {0.0f,0.0f,0.0f};
+
     public Planet(int stacks,int slices,float radius,float squash)
     {
         this.m_Stacks=stacks;
@@ -28,6 +30,15 @@ public class Planet {
 
         init(m_Stacks,m_Slices,radius,squash,"dummy");
     }
+
+    public void setPosition(float a,float b,float c)
+    {
+        m_Pos[0]=a;
+        m_Pos[1]=b;
+        m_Pos[2]=c;
+
+    }
+
     private void init(int stacks,int slices,float radius,float sqaush,String textureFile)
     {
         float[] VertexData;
