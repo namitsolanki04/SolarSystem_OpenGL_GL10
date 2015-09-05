@@ -74,7 +74,7 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
 
 
         gl.glLightfv(SS_SUNLIGHT, GL10.GL_POSITION, makeFloaBuffer(sunPos));
-        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, makeFloaBuffer(sunPos));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, makeFloaBuffer(cyan));
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, makeFloaBuffer(white));
 
         gl.glPushMatrix();
