@@ -19,12 +19,24 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
 
     public SolarSystemRenderer()
     {
-        mPlanet=new Planet(100,100,1.0f,1.0f);
+        //mPlanet=new Planet(100,100,1.0f,1.0f);
+
+        m_EyePosition[X_VALUE] = 0.0f;
+        m_EyePosition[Y_VALUE] = 0.0f;
+        m_EyePosition[Z_VALUE] = 5.0f;
+        m_Earth = new Planet(50,50,0.3f,1.0f);
+        m_Earth.setPosition(0.0f,0.0f,-2.0f);
+
+        m_Sun = new Planet(50,50,1.0f,1.0f);
+        m_Sun.setPosition(0.0f,0.0f,0.0f);
     }
+
+    static float angle = 0.0f;
 
     public void onDrawFrame(GL10 gl)
     {
 
+        /*
         Log.e("namit","onDraw ");
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -41,8 +53,61 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
 
         mTransY+=0.02f;
         mAngle+=0.4;
+
+        */
+
+        float paleYellow [] = {1.0f,1.0f,0.3f,1.0f};
+        float white[] = {1.0f,1.0f,1.0f,1.0f};
+        float cyan [] = {0.0f,1.0f,1.0f,1.0f};
+        float black[] = {0.0f,0.0f,0.0f,0.0f};
+
+        float orbitalIncrement = 1.25f;
+        float[] sunPos = {0.0f,0.0f,0.0f,1.0f};
+
+        gl.glEnable(GL10.GL_DEPTH_TEST);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        gl.glPushMatrix();
+
+        gl.glTranslatef(-m_EyePosition[X_VALUE], -m_EyePosition[Y_VALUE], -m_EyePosition[Z_VALUE]);
+
+
+        gl.glLightfv(SS_SUNLIGHT, GL10.GL_POSITION, makeFloaBuffer(sunPos));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, makeFloaBuffer(sunPos));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, makeFloaBuffer(white));
+
+        gl.glPushMatrix();
+        angle+=orbitalIncrement;
+        gl.glRotatef(angle, 0.0f, 1.0f, 0.0f);
+        executePlanet(m_Earth, gl);
+        gl.glPopMatrix();
+
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, makeFloaBuffer(paleYellow));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_SPECULAR,makeFloaBuffer(black));
+
+        executePlanet(m_Sun, gl);
+
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_EMISSION,makeFloaBuffer(black));
+
+        gl.glPopMatrix();
+
     }
 
+    private  void executePlanet(Planet _planet,GL10 gl)
+    {
+        float posX,posY,posZ;
+        posX = _planet.m_Pos[0];
+        posY = _planet.m_Pos[1];
+        posZ = _planet.m_Pos[2];
+
+        gl.glPushMatrix();
+        gl.glTranslatef(posX, posX, posZ);
+
+        _planet.draw(gl);
+        gl.glPopMatrix();
+
+    }
     public void onSurfaceChanged(GL10 gl,int width,int height)
     {
         Log.e("namit","onSurfaceChnaged width ="+width+"  height= "+height);
@@ -91,11 +156,66 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         gl.glCullFace(GL10.GL_BACK);
         gl.glShadeModel(GL10.GL_SMOOTH);
         gl.glEnable(GL10.GL_DEPTH_TEST);
-        gl.glDepthMask(false);
+        //gl.glDepthMask(false);
+
+        gl.glDepthMask(true);
+
+
       //  initGeometry(gl);
         //initLightings(gl);
         //initLightings2(gl);
-        initLightings3(gl);
+        ///initLightings3(gl);
+
+        initLightings4(gl);
+
+
+    }
+
+
+    private void initLightings4(GL10 gl)
+    {
+        float [] sunPos = {0.0f,0.0f,0.0f,1.0f};
+        float [] posFill1= {-15.0f,15.0f,0.0f,1.0f};
+        float [] posFill2 = {-10.0f,-4.0f,1.0f,1.0f};
+        float [] white = {1.0f,1.0f,1.0f,1.0f};
+        float [] dimblue = {0.0f,0.0f,0.2f,1.0f};
+        float [] cyan = {0.0f,1.0f,1.0f,1.0f};
+        float [] yellow = {1.0f,1.0f,0.0f,1.0f};
+        float [] magenta = {1.0f,0.0f,1.0f,1.0f};
+        float [] dimmagenta = {0.75f,0.0f,0.25f,1.0f};
+        float [] dimcyan = {0.0f,0.5f,0.5f,1.0f};
+
+        // lights go here
+
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_POSITION,makeFloaBuffer(sunPos));
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_DIFFUSE,makeFloaBuffer(white));
+        gl.glLightfv(SS_SUNLIGHT,GL10.GL_SPECULAR,makeFloaBuffer(yellow));
+
+
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_POSITION,makeFloaBuffer(posFill1));
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_DIFFUSE,makeFloaBuffer(dimblue));
+        gl.glLightfv(SS_FILLLIGHT1,GL10.GL_SPECULAR,makeFloaBuffer(dimcyan));
+
+
+
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_POSITION,makeFloaBuffer(posFill2));
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_DIFFUSE,makeFloaBuffer(dimmagenta));
+        gl.glLightfv(SS_FILLLIGHT2,GL10.GL_SPECULAR,makeFloaBuffer(dimblue));
+
+        //materials go here
+
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_DIFFUSE,makeFloaBuffer(cyan));
+        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK,GL10.GL_SPECULAR,makeFloaBuffer(white));
+
+        gl.glLightf(SS_SUNLIGHT, GL10.GL_QUADRATIC_ATTENUATION, 0.001f);
+        gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, 25);
+        gl.glShadeModel(GL10.GL_SMOOTH);
+        gl.glLightModelf(GL10.GL_LIGHT_MODEL_TWO_SIDE, 0.0f);
+
+        gl.glEnable(GL10.GL_LIGHTING);
+        gl.glEnable(SS_SUNLIGHT);
+        gl.glEnable(SS_FILLLIGHT1);
+        gl.glEnable(SS_FILLLIGHT2);
 
 
     }
@@ -142,7 +262,7 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
         gl.glLightfv(SS_FILLLIGHT2,GL10.GL_DIFFUSE,makeFloaBuffer(dimmagenta));
         gl.glLightfv(SS_FILLLIGHT2,GL10.GL_SPECULAR,makeFloaBuffer(dimblue));
 
-        gl.glLightf(SS_SUNLIGHT,GL10.GL_QUADRATIC_ATTENUATION,0.005f);
+        gl.glLightf(SS_SUNLIGHT, GL10.GL_QUADRATIC_ATTENUATION, 0.005f);
 
         //materials go here
 
@@ -225,4 +345,13 @@ public class SolarSystemRenderer implements GLSurfaceView.Renderer {
     private Planet mPlanet;
     private float mTransY;
     private float mAngle;
+
+    public final static int X_VALUE =0;
+    public final  static  int Y_VALUE = 1;
+    public final  static  int Z_VALUE = 2;
+
+    Planet m_Earth;
+    Planet m_Sun;
+
+    float [] m_EyePosition = {0.0f,0.0f,0.0f};
 }
